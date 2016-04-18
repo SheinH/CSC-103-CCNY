@@ -1,115 +1,51 @@
-#A Simple Paragraph Justifier
-The mission of this assignment is to realize a simple paragraph justifier. As shown in my coding demonstration, your program will keep reading lines of text image using getline(). After reading a paragraph, it adjusts all the lines into an instructed width, so that it can show the words evenly spread out and fit in a straight edge at both margins (similar to "align full" option in a Microsoft word document).
-This can be relatively easily done as we are dealing with a mono-space font set (not a proportional font set) shown on a command-line-type console. As an example, consider a line containing 5 words and 30 characters altogether. If this line needs to be justified into a 40-character width, the remaining10 spaces needs to be spread out between the words. Assume that the first word of the next line has more than 9 characters, that is, the word in the next line cannot be placed in the tail of this line so as to consume the extra spaces.
-In this case, 2 spaces are placed between the first 4 words, followed by 4 spaces prior to the last word (tail adjustment), or 3 spaces are placed between the first 4 words, followed by a space prior to the last word (even adjustment). 
-The requirements of this assignment are:
-	1.	program keeps reading lines of text until reading an empty line 
-	2.	program then reads a width for the read paragraph
-	3.	program then justifies the paragraph based on tail adjustment 
-	4.	program then shows the result in a bounding box
-	5.	program allows to adjust the paragraph by going back to 2
-	6.	program ends when it reads 0 as a new width
-Extra points (2 points) will be considered for even adjustment implementation.
-Here is a hint to realize this mission - lines of words, say vector<string> words, is a straightforward conversion as implemented in the previous assignment and posted lecture example. Now, user types some width for justification. Let this width be W. The mission is to fill i-words in one line of this W. Note i > 0, i.e., every line must have at least one word. The logic will be:
-	1.	let { w1, w2, ..., wi } be a collection of words. Then, w1.length() + w2.length() + ... + wi.length() is the total length of this collection 
-	2.	since we need at least one space between these i words, we need i - 1 spaces at least, and therefore, we need Wmin = w1.length() + w2.length() + ... + wi.length() + (i - 1) characters, which must be less than or equal to W
-	3.	your first loop must identify this i and Wmin by going through vector<string> words you created
-	4.	in the second loop, you simply create a line by adding w1 through wi-1 by placing a space between the two consecutive words
-	5.	before placing the last word wi, you need to place W - Wmin spaces because this number is the excess spaces to fill in for justification (tail adjustment)!
-There is no miracle or hidden trick to deal with these operations.The left-hand side of the next example shows tail adjustment while the right-hand side shows even adjustment:
+# Just type this
+
+This is to implement a simple game, my version of "Just type this!" game. Computer will generate a random string and you need to reproduce it within a certain interval. You will lose points significantly if you fail to produce the same string within the set interval.
+
+You have 1000 points in the beginning of the game.  Starting with 5 randomly generated letters being mixed with lower and upper cases, you need to type them correctly within 5000 msec. If you succeed in three consecutive rounds, no matter you made them within the interval or not, you will proceed for the harder round of one more letter (6 letters) within 250 msec shorter duration (4750 msec). You will get 100 points every time you produce the matching string within the interval. No point will be given if exceeding the time interval, even reproducing the right string. The challenge becomes increasingly difficult after the successful match of three rounds (within the interval or not), e.g., 9 letters to type within 4000 msec.
+
+If you misspell, you will be penalized by the total offset of mistaken letters. You will loose this offset from your points. The offset is computed by accumulating the absolute distance between two characters in the same position, one from the generated string and another from the input. For instance, the offset of "Game" and "Mag" is 81. The shorter string is padded with space(s). Therefore, |G - M| = 6, |a - a| = 0, |m - g| = 6, |e - (space)| = 69. If you misspell and overtime, you will be penalized the double score of the offset. Making three consecutive errors will reverse the challenge, i.e., 1 letter less and 250 msec more interval. Game ends when you type "end" or reaching negative points.
+
+‘’’
+Your current points 1000, just type [5] -> LfquF: LfquF
+3833 milliseconds, you made it within the interval of 5000...
+
+Your current points 1100, just type [5] -> KyVRy: KyVRy
+3104 milliseconds, you made it within the interval of 5000...
+One more for next challenge!!!
+
+Your current points 1200, just type [5] -> FZMlG: FZMlG
+4004 milliseconds, you made it within the interval of 5000...
+
+Your current points 1300, just type [6] -> vUQPBl: vUQPBl
+5433 milliseconds, you *failed* it within the interval of 4750...
+
+Your current points 1300, just type [6] -> dRCWNe: dRCWne
+6997 milliseconds, you *failed* it within the interval of 4750...
+String offset is 32, your penalty is 64...
+
+Your current points 1236, just type [6] -> oqKatD: opKatD
+7537 milliseconds, you *failed* it within the interval of 4750...
+String offset is 1, your penalty is 2...
+Make next round for not going back!!!
+
+Your current points 1234, just type [6] -> hSITbf: hsIF
+9044 milliseconds, you *failed* it within the interval of 4750...
+String offset is 182, your penalty is 364...
+
+Your current points 870, just type [5] -> FlDPf: FlDQF
+6862 milliseconds, you *failed* it within the interval of 5000...
+String offset is 33, your penalty is 66...
+
+Your current points 804, just type [5] -> dKrqO: da
+6086 milliseconds, you *failed* it within the interval of 5000...
+String offset is 232, your penalty is 464...
+Make next round for not going back!!!
+
+Your current points 340, just type [5] -> mXpfF: mxF
+10215 milliseconds, you *failed* it within the interval of 5000...
+String offset is 182, your penalty is 364...
+You lost...
+Bye...
 ```
-Enter text, empty return will quit the input
-> Every photo, every edit, every album now lives 
-> in your iCloud Photo Library, easily viewable 
-> and consistent on all your devices. 
-> Automatically. The all-new Photos app makes 
-> it simpler than ever to find and rediscover   
-> your favorite photos. And you can make every 
-> shot look even better immediately after you've 
-> taken it with powerful new editing tools.
->
-> Enter the width of text: 25
-|-------------------------|
-|very photo, every   edit,|
-|every album now lives  in|
-|your     iCloud     Photo|
-|Library, easily  viewable|
-|and  consistent  on   all|
-|your             devices.|
-|Automatically.        The|
-|all-new Photos app  makes|
-|it simpler than ever   to|
-|find and rediscover  your|
-|favorite photos. And  you|
-|can make every shot  look|
-|even  better  immediately|
-|after  you've  taken   it|
-|with powerful new editing|
-|tools.                   |
-|-------------------------|
-Enter the width of text: 30
-|------------------------------|
-|very photo, every edit,  every|
-|album now lives in your iCloud|
-|Photo Library, easily viewable|
-|and  consistent  on  all  your|
-|devices.  Automatically.   The|
-|all-new Photos app makes    it|
-|simpler than ever to find  and|
-|rediscover    your    favorite|
-|photos. And you can make every|
-|shot    look    even    better|
-|immediately after you've taken|
-|it with powerful new   editing|
-|tools.                        |
-|------------------------------|
-Enter the width of text: 0
-```
-```
- Enter text, empty return will quit the input
->  Every photo, every edit, every album now lives
-> in your iCloud Photo Library, easily viewable 
->  and consistent on all your devices. 
-> Automatically. The all-new Photos app makes 
-> it simpler than ever to find and rediscover   
->  your favorite photos. And you can make every 
-> shot look even better immediately after you've 
-> taken it with powerful new editing tools.
->
-> Enter the width of text: 25
-|-------------------------|
-|Every  photo, every edit,|
-|every  album now lives in|
-|your     iCloud     Photo|
-|Library,  easily viewable|
-|and   consistent  on  all|
-|your             devices.|
-|Automatically.        The|
-|all-new  Photos app makes|
-|it  simpler  than ever to|
-|find  and rediscover your|
-|favorite  photos. And you|
-|can  make every shot look|
-|even  better  immediately|
-|after   you've  taken  it|
-|with powerful new editing|
-|tools.                   |
-|-------------------------|
-Enter the width of text: 30
-|------------------------------|
-|Every photo, every edit, every|
-|album now lives in your iCloud|
-|Photo Library, easily viewable|
-|and  consistent  on  all  your|
-|devices.   Automatically.  The|
-|all-new  Photos  app  makes it|
-|simpler  than ever to find and|
-|rediscover    your    favorite|
-|photos. And you can make every|
-|shot    look    even    better|
-|immediately after you've taken|
-|it  with  powerful new editing|
-|tools.                        |
-|------------------------------|
-Enter the width of text: 0
-```
+Finally as in the previous assignment, implement the specified task with your shortest possible coding. My implementation is about 70 lines.
