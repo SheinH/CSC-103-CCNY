@@ -49,9 +49,11 @@ void Player::autoBet(Player &p){
 }
 void Player::cinBet(){
 	cout << "  Enter \"c\" (even) or \"h\" (odd) and an amount you bet: ";
-	cin.ignore(2);
+	char c;
+	int bet;
+	cin >> c;
 	cin >> bet;
-	if(!cin || bet > balance || bet == 0){
+	if(!cin || bet > balance || bet == 0 || c != 'c' || c != 'h'){
 		cout << "  Invalid bet. Try again." << endl;
 		cin.clear();
 		cin.ignore(INT_MAX,'\n');
