@@ -53,7 +53,7 @@ void Player::cinBet(){
 	int bet;
 	cin >> c;
 	cin >> bet;
-	if(!cin || bet > balance || bet == 0 || c != 'c' || c != 'h'){
+	if(!cin || bet > balance || bet == 0 || (c != 'c' && c != 'h')){
 		cout << "  Invalid bet. Try again." << endl;
 		cin.clear();
 		cin.ignore(INT_MAX,'\n');
